@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/tcotav/imginv/types"
+	"github.com/tcotav/k8siinv/types"
 )
 
 type ClusterInventoryService struct {

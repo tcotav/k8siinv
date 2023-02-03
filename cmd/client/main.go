@@ -20,7 +20,7 @@ import (
 	"k8s.io/client-go/tools/clientcmd"
 	"k8s.io/client-go/util/homedir"
 
-	"github.com/tcotav/imginv/types"
+	"github.com/tcotav/k8siinv/types"
 )
 
 const VERSION string = "1.0.0"
