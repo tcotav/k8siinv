@@ -1,0 +1,12 @@
+TRUNCATE TABLE activity;
+TRUNCATE TABLE clusterinventory;
+SET FOREIGN_KEY_CHECKS = 0; 
+TRUNCATE TABLE images;
+TRUNCATE TABLE clusters;
+SET FOREIGN_KEY_CHECKS = 1; 
+
+
+DROP TABLE activity;
+DROP TABLE clusterinventory;
+DROP TABLE images;
+DROP TABLE cluster;
