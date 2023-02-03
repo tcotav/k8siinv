@@ -1,11 +1,12 @@
-CREATE USER 'imginv'@'%' IDENTIFIED WITH mysql_native_password BY 'password';
-ALTER USER 'imginv'@'%' IDENTIFIED WITH mysql_native_password BY 'password';
+-- Create a user for the app
+-- 
+-- CREATE USER 'k8siinv'@'%' IDENTIFIED WITH mysql_native_password BY 'password';
+--
+-- CREATE DATABASE k8siinv;
+-- 
+-- GRANT ALL PRIVILEGES ON k8siinv.* TO 'imginv'@'%';
 
-CREATE DATABASE testimginv;
-
-GRANT ALL PRIVILEGES ON testimginv.* TO 'imginv'@'%';
-
-USE testimginv;
+USE k8siinv;
 
 -- cluster info
 CREATE TABLE clusters (

@@ -10,8 +10,8 @@ import (
 	echo "github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 
-	"github.com/tcotav/imginv/services"
-	"github.com/tcotav/imginv/types"
+	"github.com/tcotav/k8siinv/services"
+	"github.com/tcotav/k8siinv/types"
 )
 
 func saveImages(c echo.Context) error {

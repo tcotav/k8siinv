@@ -1,4 +1,4 @@
-module github.com/tcotav/imginv
+module github.com/tcotav/k8siinv
 
 go 1.19
 
