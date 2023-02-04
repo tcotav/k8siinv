@@ -23,6 +23,8 @@ func (c *ClusterInventoryService) saveCluster(clusterName string, generatedAt st
 	if err != nil {
 		return -1, fmt.Errorf("prepare insert cluster fail %v", err.Error())
 	}
+	defer stmt.Close()
+
 	res, err := stmt.Exec(clusterName, generatedAt, generatedAt, generatedAt)
 	if err != nil {
 		return -1, fmt.Errorf("exec insert cluster fail %v", err.Error())
@@ -40,6 +42,7 @@ func (c *ClusterInventoryService) saveImage(name string, version string, generat
 	if err != nil {
 		return -1, fmt.Errorf("prepare - insert image fail %v", err.Error())
 	}
+	defer stmt.Close()
 	res, err := stmt.Exec(name, version, generatedAt, generatedAt, generatedAt)
 	if err != nil {
 		return -1, fmt.Errorf("exec - insert image fail %v", err.Error())
@@ -67,6 +70,7 @@ func (c *ClusterInventoryService) saveImageList(clusterId int64, generatedAt str
 			if err != nil {
 				return fmt.Errorf("prepare clusterinv fail %v", err.Error())
 			}
+			defer stmt.Close()
 			_, err = stmt.Exec(imgId, clusterId, pimg.Name, pimg.Namespace, pimg.StartTime)
 			if err != nil {
 				return fmt.Errorf("exec - prepare clusterinv fail %v", err.Error())
@@ -88,6 +92,7 @@ func (c *ClusterInventoryService) SaveClusterInventory(inv *types.ClusterInvento
 	if err != nil {
 		return fmt.Errorf("prepare - insert activity fail %v", err.Error())
 	}
+	defer stmt.Close()
 	_, err = stmt.Exec(clusterId, inv.Version, inv.GeneratedAt)
 	if err != nil {
 		return fmt.Errorf("exec - insert activity fail %v", err.Error())
