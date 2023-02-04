@@ -1,0 +1,4 @@
+databaseDSN: "imginv:password@tcp(127.0.0.1:3306)/testimginv"
+
+httplistener:
+  port: 8080
