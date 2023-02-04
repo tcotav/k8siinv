@@ -10,6 +10,7 @@ import (
 	echo "github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 
+	"github.com/spf13/viper"
 	"github.com/tcotav/k8siinv/services"
 	"github.com/tcotav/k8siinv/types"
 )
@@ -29,15 +30,37 @@ func saveImages(c echo.Context) error {
 
 var clusterImageService *services.ClusterInventoryService
 
+type ServerConfig struct {
+	DatabaseDSN  string `json:"databaseDSN"`
+	HTTPListener struct {
+		Port int `json:"port"`
+	} `json:"httplistener"`
+}
+
 func main() {
-	dsn := "imginv:password@tcp(127.0.0.1:3306)/testimginv?parseTime=true"
+
 	e := echo.New()
 	e.Use(middleware.Logger())
+
+	viper.SetConfigName("servconfig")
+	viper.SetConfigType("yaml")
+	viper.AddConfigPath("/etc/k8siinv/")
+	viper.AddConfigPath("$HOME/.k8siinv")
+	viper.AddConfigPath(".")
+	err := viper.ReadInConfig()
+	if err != nil {
+		e.Logger.Fatal("fatal error config file: %w", err)
+	}
+
+	var config ServerConfig
+	viper.Unmarshal(&config)
+
 	e.GET("/", func(c echo.Context) error {
 		return c.String(http.StatusOK, "Hello, World!")
 	})
 	e.POST("/v1/images", saveImages)
 
+	dsn := fmt.Sprintf("%s?parseTime=true", config.DatabaseDSN)
 	db, err := openDB(dsn)
 	if err != nil {
 		e.Logger.Fatal(err)
@@ -53,7 +76,7 @@ func main() {
 		}
 	}(db)
 
-	e.Logger.Fatal(e.Start(":8080"))
+	e.Logger.Fatal(e.Start(fmt.Sprintf(":%d", config.HTTPListener.Port)))
 }
 
 func openDB(dsn string) (*sql.DB, error) {
