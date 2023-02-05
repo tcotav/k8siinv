@@ -1,5 +1,7 @@
 clusterName: "testcluster"
 
+runOutsideCluster: true
+
 connectinfo:
   url: "http://localhost:8080/v1/images"
   retry: 5 
