@@ -9,6 +9,7 @@ import (
 	"net/http"
 
 	"github.com/hashicorp/go-retryablehttp"
+	"k8s.io/client-go/kubernetes"
 
 	"github.com/spf13/viper"
 	"github.com/tcotav/k8siinv/client"
@@ -16,8 +17,9 @@ import (
 )
 
 type ClientConfig struct {
-	ClusterName string `json:"clusterName"`
-	ConnectInfo struct {
+	ClusterName       string `json:"clusterName"`
+	RunOutsideCluster bool   `json:"runOutsideCluster"`
+	ConnectInfo       struct {
 		Url   string `json:"url"`
 		Retry int    `json:"retry"`
 	} `json:"connectinfo"`
@@ -36,11 +38,20 @@ func main() {
 
 	var config ClientConfig
 	viper.Unmarshal(&config)
-
-	// create the clientset
-	clientset, err := client.GetOutClusterConfig()
-	if err != nil {
-		log.Fatal(err.Error())
+	var clientset *kubernetes.Clientset
+	if config.RunOutsideCluster {
+		// create the clientset
+		clientset, err = client.GetOutClusterConfig()
+		if err != nil {
+			log.Fatal(err.Error())
+		}
+	} else {
+		// this is the expected way to run this -- as a cronjob
+		// create the clientset for in-cluster
+		clientset, err = client.GetInClusterConfig()
+		if err != nil {
+			log.Fatal(err.Error())
+		}
 	}
 
 	clusterImages, err := client.GetClusterInventory(clientset, config.ClusterName)
