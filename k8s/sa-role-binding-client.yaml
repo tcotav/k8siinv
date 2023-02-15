@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: k8siinv-sa
+  namespace: k8ssiinv
+-- 
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: k8ssiinv-cluster-role
+# When you create the "monitoring-endpoints" ClusterRole,
+# the rules below will be added to the "monitoring" ClusterRole.
+rules:
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get", "list"]
+--
+apiVersion: rbac.authorization.k8s.io/v1
+# This cluster role binding allows anyone in the "manager" group to read secrets in any namespace.
+kind: ClusterRoleBinding
+metadata:
+  name: k8ssiinv-cluster-rolebind 
+subjects:
+- kind: ServiceAccount 
+  name: k8siinv-sa
+  namespace: k8ssiinv
+roleRef:
+  kind: ClusterRole
+  name: k8ssiinv-cluster-role
+  apiGroup: rbac.authorization.k8s.io
